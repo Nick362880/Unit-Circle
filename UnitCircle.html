@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="Duckster.ico">
+		<title>Unit Circle</title>
+		<style>
+			body {
+				margin: 0;
+			}
+			
+			canvas {
+				position: absolute;
+			}
+		</style>
+		<script>
+			// Unit Circle by Nick G
+			
+			var ctx, w, h;
+			var a = 0; // Radian
+			var step = 360; // Increment Ratio
+			
+			window.onload = function() {
+				var canv = document.querySelector("canvas");
+				canv.width = w = window.innerWidth;
+				canv.height = h = window.innerHeight;
+				ctx = canv.getContext("2d");
+				
+				window.requestAnimationFrame(main);
+			}
+			
+			function main() {
+				a -= (Math.PI * 2) / step;
+				var x = Math.cos(a) * 64 + w / 2;
+				var y = Math.sin(a) * 64 + h / 2;
+				
+				ctx.clearRect(0, 0, w, h);
+				
+				// X-Axis
+				ctx.strokeStyle = "#DDD";
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.moveTo(0, h / 2);
+				ctx.lineTo(w, h / 2);
+				ctx.stroke();
+				
+				// Y-Axis
+				ctx.beginPath();
+				ctx.moveTo(w / 2, 0);
+				ctx.lineTo(w / 2, h);
+				ctx.stroke();
+				
+				// Circle
+				ctx.strokeStyle = "#000";
+				ctx.beginPath();
+				ctx.arc(w / 2, h / 2, 64, 0, 2 * Math.PI);
+				ctx.stroke();
+				
+				// (x, y) point
+				ctx.fillStyle = "#F00";
+				ctx.beginPath();
+				ctx.arc(x, y, 2, 0, 2 * Math.PI);
+				ctx.fill();
+				
+				// (x, y) label
+				ctx.font = "12px Arial";
+				ctx.fillStyle = "#000";
+				ctx.fillText("(" + ((x - w / 2) / 64).toFixed(2) + ", " + (-(y - h / 2) / 64).toFixed(2) + ")", x, y - 8); // Negating y because JS counts the y-axis upside-down. This does not affect logic, but does affect the output.
+				
+				// Adjacent Side
+				ctx.strokeStyle = "#F00";
+				ctx.beginPath();
+				ctx.moveTo(w / 2, h / 2); // Center
+				ctx.lineTo(x, h / 2); // x-coordinate along x-axis
+				ctx.stroke();
+				
+				// Opposite Side
+				ctx.beginPath();
+				ctx.moveTo(x, h / 2); // x-coordinate along x-axis
+				ctx.lineTo(x, y); // (x, y) point
+				ctx.stroke();
+				
+				// Hypotenuse
+				ctx.beginPath();
+				ctx.moveTo(w / 2, h / 2); // Center
+				ctx.lineTo(x, y); // (x, y) point
+				ctx.stroke();
+				
+				window.requestAnimationFrame(main);
+			}
+		</script>
+	</head>
+	<body>
+		<canvas></canvas>
+	</body>
+</html>
